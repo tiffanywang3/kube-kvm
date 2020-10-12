@@ -1,0 +1,40 @@
+#cloud-config
+users:
+  - default
+  - name: kube-admin
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: adm,sys
+    home: /home/kube-admin
+    shell: /bin/bash
+    lock_passwd: true
+
+ssh_pwauth: false
+disable_root: false
+
+chpasswd:
+  list: |
+     root:linux
+  expire: False
+
+packages:
+  - qemu-guest-agent
+  - bind-utils
+  - haproxy
+
+growpart:
+  mode: auto
+  devices: ['/']
+
+# written to /var/log/cloud-init-output.log
+final_message: "The system is finally up, after $UPTIME seconds"
+
+# every boot
+bootcmd:
+  - [ sh, -c, 'echo ran cloud-init again at $(date) | sudo tee -a /root/bootcmd.log' ]
+  - setsebool -P haproxy_connect_any=1
+
+runcmd:
+  - mkdir -p /home/kube-admin/.ssh || true
+  - curl https://github.com/GH_USER.keys | tee -a /home/kube-admin/.ssh/authorized_keys
+  - chmod -R u=rwX,g=rX,o= /home/kube-admin/.ssh
+  - chown -R kube-admin:kube-admin /home/kube-admin/.ssh

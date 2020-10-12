@@ -1,0 +1,21 @@
+.*
+
+# git configuration
+!.gitignore
+!.gitattributes
+!.github/
+
+# docker
+!.dockerignore
+
+# releases
+!.releaserc
+
+# images
+*.img
+*.qcow2
+*-metadata
+
+# config files
+*.cfg
+!network.cfg
