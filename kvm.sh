@@ -175,7 +175,7 @@ for (( i=1; i<=$MASTER_NODE_COUNT; i++ )); do
   ip=$(sudo virsh domifaddr --domain ${name} --source agent | grep -w eth1 | egrep -o '([[:digit:]]{1,3}\.){3}[[:digit:]]{1,3}')
 
   # add the ip to the haproxy config
-  echo "    server $name $ip:6433 check" >> haproxy.cfg
+  echo "    server $name $ip:6443 check" >> haproxy.cfg
 done
 
 # modify the cloud_init to include the haproxy.cfg
