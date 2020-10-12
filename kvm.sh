@@ -191,3 +191,10 @@ EOF
 
 # create the ha proxy node
 create_vm kube-proxy
+
+# print out the private ips and HAProxy stats
+echo
+echo PRIVATE IPs
+sudo virsh net-dhcp-leases --network default
+echo
+echo HAProxy Stats: http://kube-proxy:8404/stats
